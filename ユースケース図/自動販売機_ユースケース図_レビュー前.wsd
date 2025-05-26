@@ -1,4 +1,11 @@
 @startuml
+
+left to right direction
+
+actor 購入者
+actor 管理者
+actor サービスマン
+
 rectangle 自働販売機 {
     usecase 商品を確認する  as UC1
     usecase 商品を購入する as UC2
@@ -16,4 +23,3 @@ rectangle 自働販売機 {
 管理者 -- UC6
 サービスマン -- UC7
 @enduml
-```

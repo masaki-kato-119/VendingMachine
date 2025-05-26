@@ -1,4 +1,11 @@
 @startuml
+
+left to right direction
+
+actor 利用者
+actor 管理者
+actor メンテナンス担当者
+
 rectangle 自動販売機 {
     usecase 商品一覧を表示する as UC1
     usecase 商品を選択し購入する as UC2
