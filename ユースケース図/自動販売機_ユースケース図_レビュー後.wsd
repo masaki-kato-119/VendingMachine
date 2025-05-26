@@ -3,7 +3,7 @@ rectangle 自動販売機 {
     usecase 商品一覧を表示する as UC1
     usecase 商品を選択し購入する as UC2
     usecase お金を投入する as UC8
-    usecase 釣銭／返金を受け取る as UC9
+    usecase 釣銭_返金を受け取る as UC9
     usecase 売上金を回収する  as UC3
     usecase 商品を補充する  as UC4
     usecase 釣銭を補充する  as UC5
