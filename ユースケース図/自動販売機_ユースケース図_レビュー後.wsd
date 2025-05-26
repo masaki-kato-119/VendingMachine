@@ -1,0 +1,25 @@
+@startuml
+rectangle 自動販売機 {
+    usecase 商品一覧を表示する as UC1
+    usecase 商品を選択し購入する as UC2
+    usecase お金を投入する as UC8
+    usecase 釣銭／返金を受け取る as UC9
+    usecase 売上金を回収する  as UC3
+    usecase 商品を補充する  as UC4
+    usecase 釣銭を補充する  as UC5
+    usecase 販売商品を変更する as UC6
+    usecase 故障対応を行う as UC7
+    usecase 機械の状態を確認する as UC10
+}
+利用者 -- UC1
+利用者 -- UC2
+利用者 -- UC8
+利用者 -- UC9
+管理者 -- UC3
+管理者 -- UC4
+管理者 -- UC5
+管理者 -- UC6
+メンテナンス担当者 -- UC7
+管理者 -- UC10
+
+@enduml

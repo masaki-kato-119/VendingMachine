@@ -1,0 +1,19 @@
+@startuml
+rectangle 自働販売機 {
+    usecase 商品を確認する  as UC1
+    usecase 商品を購入する as UC2
+    usecase 売上げを回収する  as UC3
+    usecase 商品を補充する  as UC4
+    usecase お釣りを補充する  as UC5
+    usecase 商品を変更する  as UC6
+    usecase 故障を修理する as UC7
+}
+購入者 -- UC1
+購入者 -- UC2
+管理者 -- UC3
+管理者 -- UC4
+管理者 -- UC5
+管理者 -- UC6
+サービスマン -- UC7
+@enduml
+```
