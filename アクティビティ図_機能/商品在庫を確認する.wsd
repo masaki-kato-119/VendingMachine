@@ -1,0 +1,7 @@
+@startuml
+start
+rectangle 商品ラック {
+    :商品の在庫・情報を取得;    
+}
+stop
+@enduml

@@ -1,0 +1,17 @@
+@startuml
+start
+rectangle 投入金口 {
+    :待機状態になる;
+    :投入された金額を確認;
+    if (お金が投入されたか?) then (Yes)
+        if (金額認識?) then (はい)
+            :投入金額を取得;
+            :合計投入金額を更新;
+        else (いいえ)
+            :投入物を返却;
+        endif
+    else (No)
+    endif
+}
+stop
+@enduml

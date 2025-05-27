@@ -1,0 +1,14 @@
+@startuml
+start
+rectangle 操作パネル {
+  :商品ボタン押下を確認;
+  if (商品ボタン押下?) then (Yes)
+    :投入金額、商品在庫および釣銭状況を確認;
+    if (投入金額、在庫・釣銭OK?) then (Yes)
+        :購入処理完了;
+    endif
+  else (No)
+  endif
+}
+stop
+@enduml

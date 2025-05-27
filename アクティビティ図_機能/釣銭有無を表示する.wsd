@@ -1,0 +1,7 @@
+@startuml
+start
+rectangle 表示パネル {
+    :釣銭有無を表示;
+}
+stop
+@enduml

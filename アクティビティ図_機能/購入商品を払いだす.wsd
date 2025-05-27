@@ -1,0 +1,7 @@
+@startuml
+start
+rectangle 商品ラック {
+    :商品を払い出す;
+}
+stop
+@enduml

@@ -1,0 +1,7 @@
+@startuml
+start
+rectangle 釣銭機 {
+  :現在の釣銭残量を取得する;
+}
+stop
+@enduml

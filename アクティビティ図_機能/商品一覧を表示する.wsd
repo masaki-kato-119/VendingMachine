@@ -1,0 +1,7 @@
+@startuml
+start
+rectangle 表示パネル {
+    :商品一覧（商品名、価格、在庫有無等）を表示;
+}
+stop
+@enduml

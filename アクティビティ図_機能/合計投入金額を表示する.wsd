@@ -1,0 +1,7 @@
+@startuml
+start
+rectangle 表示パネル {
+  :投入金額を表示;
+}
+stop
+@enduml
