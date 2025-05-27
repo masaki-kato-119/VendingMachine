@@ -1,19 +1,30 @@
 @startuml
 start
+
+:<<input>> 釣銭_返金金額;
 rectangle 自動販売機 {
     :取引終了時に釣銭や返金が必要か判断;
     if (釣銭や返金あり?) then (Yes)
 
+:<<input>> 釣銭金額;
 rectangle 釣銭機 {
     :釣銭・返金排出口に金額を払い出す;
 }
+:<<output>> 釣銭;
+
+:<<input>> 返金有無;
 rectangle 表示パネル {
     :釣銭・返金の払い出しを案内;
 }
+:<<input>> 返金案内表示;
+
   else (No)
+:<<input>>;
 rectangle 表示パネル {
     :通知なし;
 }
+:<<output>>;
   endif
 }    
+:<<output>>;
   stop

@@ -1,11 +1,13 @@
 
 @startuml
 start
+:<<input>>在庫、釣銭OK;
 rectangle 操作パネル {
   if (在庫・釣銭OK?) then (Yes)      
       :選択可能な商品ボタンを点灯;
   else (No)      
   endif
 }
+:<<output>>商品ボタン点灯;
 stop
 @enduml

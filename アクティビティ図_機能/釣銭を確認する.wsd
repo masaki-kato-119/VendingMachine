@@ -1,7 +1,9 @@
 @startuml
 start
+:<<input>>;
 rectangle 釣銭機 {
   :現在の釣銭残量を取得する;
 }
+:<<output>> 釣銭有無;
 stop
 @enduml

@@ -1,5 +1,6 @@
 @startuml
 start
+:<<input>>投入金額;
 rectangle 投入金口 {
     :待機状態になる;
     :投入された金額を確認;
@@ -13,5 +14,6 @@ rectangle 投入金口 {
     else (No)
     endif
 }
+:<<output>>合計投入金額;
 stop
 @enduml

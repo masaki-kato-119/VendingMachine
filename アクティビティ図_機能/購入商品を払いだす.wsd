@@ -1,7 +1,9 @@
 @startuml
 start
+:<<input>>選択商品;
 rectangle 商品ラック {
     :商品を払い出す;
 }
+:<<output>>商品;
 stop
 @enduml

@@ -1,5 +1,6 @@
 @startuml
 start
+:<<input>>合計投入金額、在庫、釣銭OK;
 rectangle 操作パネル {
   :商品ボタン押下を確認;
   if (商品ボタン押下?) then (Yes)
@@ -10,5 +11,6 @@ rectangle 操作パネル {
   else (No)
   endif
 }
+:<<output>>選択商品;
 stop
 @enduml

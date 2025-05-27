@@ -1,7 +1,9 @@
 @startuml
 start
+:<<input>>合計投入金額;
 rectangle 表示パネル {
   :投入金額を表示;
 }
+:<<output>>合計投入金額表示;
 stop
 @enduml
