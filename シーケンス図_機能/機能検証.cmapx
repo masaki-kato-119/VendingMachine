@@ -1,0 +1,4 @@
+<map id="機能検証_map" name="機能検証_map">
+<area shape="rect" id="id1" href="お釣りあり" title="お釣りあり" alt="" coords="100,1026,156,1040"/>
+<area shape="rect" id="id2" href="投入金額>=商品価格" title="投入金額>=商品価格" alt="" coords="90,641,158,655"/>
+</map>
