@@ -1,95 +1,119 @@
 @startuml 自動販売機_要求図
 left to right direction
 
-class 利用者 <<actor>> {
+' アクター定義
+class 利用者 <<actor>> {}
+class 管理者 <<actor>> {}
+class メンテナンス担当 <<actor>> {}
+
+' 上位要求
+class SR1 <<requirement>> {
+  id = SR1
+  text = 利用者が簡単かつ確実に商品を購入できること
+}
+class SR2 <<requirement>> {
+  id = SR2
+  text = 管理者が安全かつ効率的に運用管理できること
+}
+class SR3 <<requirement>> {
+  id = SR3
+  text = 故障が発生しても迅速に対応できること
 }
 
-class 管理者 <<actor>> {
-}
-
-class メンテナンス担当 <<actor>> {
-}
-
-' アクターと要求の関連
-利用者 *-- R1
-利用者 *-- R2
-利用者 *-- R3
-利用者 *-- R4
-
-管理者 *-- R5
-管理者 *-- R6
-管理者 *-- R7
-管理者 *-- R8
-管理者 *-- R9
-
-メンテナンス担当 *-- R10
-
-' ユースケース
-class UC1 <<usecase>> {
-  商品一覧を表示する
-}
-class UC2 <<usecase>> {
-  商品を選択し購入する
-}
-class UC3 <<usecase>> {
-  お金を投入する
-}
-class UC4 <<usecase>> {
-  釣銭_返金を受け取る
-}
-class UC5 <<usecase>> {
-    売上金を回収する
-}
-class UC6 <<usecase>> {
-    商品を補充する
-}
-class UC7 <<usecase>> {
-    釣銭を補充する
-}
-class UC8 <<usecase>> {
-    販売商品を変更する
-}
-class UC9 <<usecase>> {
-    故障対応を行う
-}
-class UC10 <<usecase>> {
-    機械の状態を確認する
-}
-
-
-' 要求（クラスとして表現）
+' 子要求（詳細要求）
 class R1 <<requirement>> {
-  現金またはキャッシュレスで支払いたい
+  id = R1
+  text = 現金またはキャッシュレスで支払いたい
 }
 class R2 <<requirement>> {
-  商品を選んで購入したい
+  id = R2
+  text = 商品を選んで購入したい
 }
 class R3 <<requirement>> {
-  購入可能な商品を視認したい
+  id = R3
+  text = 購入可能な商品を視認したい
 }
 class R4 <<requirement>> {
-  釣銭・返金を正しく受け取りたい
+  id = R4
+  text = 釣銭・返金を正しく受け取りたい
 }
 class R5 <<requirement>> {
-  売上金を安全に回収したい
+  id = R5
+  text = 売上金を安全に回収したい
 }
 class R6 <<requirement>> {
-  商品を補充したい
+  id = R6
+  text = 商品を補充したい
 }
 class R7 <<requirement>> {
-  釣銭を補充したい
+  id = R7
+  text = 釣銭を補充したい
 }
 class R8 <<requirement>> {
-  販売商品を変更したい
+  id = R8
+  text = 販売商品を変更したい
 }
 class R9 <<requirement>> {
-  機械の状態を確認したい
+  id = R9
+  text = 機械の状態を確認したい
 }
 class R10 <<requirement>> {
-  故障時に対応・復旧したい
+  id = R10
+  text = 故障時に対応・復旧したい
 }
 
-' 要求とユースケースのトレーサビリティリンク
+' 要求階層（deriveReqt）
+SR1 --> R1 : <<deriveReqt>>
+SR1 --> R2 : <<deriveReqt>>
+SR1 --> R3 : <<deriveReqt>>
+SR1 --> R4 : <<deriveReqt>>
+
+SR2 --> R5 : <<deriveReqt>>
+SR2 --> R6 : <<deriveReqt>>
+SR2 --> R7 : <<deriveReqt>>
+SR2 --> R8 : <<deriveReqt>>
+SR2 --> R9 : <<deriveReqt>>
+
+SR3 --> R10 : <<deriveReqt>>
+
+' アクターと上位要求の関係
+利用者 *-- SR1
+管理者 *-- SR2
+メンテナンス担当 *-- SR3
+
+' ユースケース定義
+class UC1 <<usecase>> {
+   商品一覧を表示する
+}
+class UC2 <<usecase>> {
+   商品を選択し購入する 
+}
+class UC3 <<usecase>> {
+   お金を投入する 
+}
+class UC4 <<usecase>> {
+   釣銭_返金を受け取る 
+}
+class UC5 <<usecase>> {
+   売上金を回収する 
+}
+class UC6 <<usecase>> {
+   商品を補充する 
+}
+class UC7 <<usecase>> {
+   釣銭を補充する 
+}
+class UC8 <<usecase>> {
+   販売商品を変更する 
+}
+class UC9 <<usecase>> {
+   故障対応を行う 
+}
+class UC10 <<usecase>> {
+   機械の状態を確認する 
+}
+
+' 要求とユースケースのトレーサビリティ
 R1 <.. UC3 : <<refine>>
 R2 <.. UC2 : <<refine>>
 R3 <.. UC1 : <<refine>>
