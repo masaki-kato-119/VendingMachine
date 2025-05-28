@@ -1,0 +1,104 @@
+@startuml 自動販売機_要求図
+left to right direction
+
+class 利用者 <<actor>> {
+}
+
+class 管理者 <<actor>> {
+}
+
+class メンテナンス担当 <<actor>> {
+}
+
+' アクターと要求の関連
+利用者 *-- R1
+利用者 *-- R2
+利用者 *-- R3
+利用者 *-- R4
+
+管理者 *-- R5
+管理者 *-- R6
+管理者 *-- R7
+管理者 *-- R8
+管理者 *-- R9
+
+メンテナンス担当 *-- R10
+
+' ユースケース
+class UC1 <<usecase>> {
+  商品一覧を表示する
+}
+class UC2 <<usecase>> {
+  商品を選択し購入する
+}
+class UC3 <<usecase>> {
+  お金を投入する
+}
+class UC4 <<usecase>> {
+  釣銭_返金を受け取る
+}
+class UC5 <<usecase>> {
+    売上金を回収する
+}
+class UC6 <<usecase>> {
+    商品を補充する
+}
+class UC7 <<usecase>> {
+    釣銭を補充する
+}
+class UC8 <<usecase>> {
+    販売商品を変更する
+}
+class UC9 <<usecase>> {
+    故障対応を行う
+}
+class UC10 <<usecase>> {
+    機械の状態を確認する
+}
+
+
+' 要求（クラスとして表現）
+class R1 <<requirement>> {
+  現金またはキャッシュレスで支払いたい
+}
+class R2 <<requirement>> {
+  商品を選んで購入したい
+}
+class R3 <<requirement>> {
+  購入可能な商品を視認したい
+}
+class R4 <<requirement>> {
+  釣銭・返金を正しく受け取りたい
+}
+class R5 <<requirement>> {
+  売上金を安全に回収したい
+}
+class R6 <<requirement>> {
+  商品を補充したい
+}
+class R7 <<requirement>> {
+  釣銭を補充したい
+}
+class R8 <<requirement>> {
+  販売商品を変更したい
+}
+class R9 <<requirement>> {
+  機械の状態を確認したい
+}
+class R10 <<requirement>> {
+  故障時に対応・復旧したい
+}
+
+' 要求とユースケースのトレーサビリティリンク
+R1 <.. UC3 : <<refine>>
+R2 <.. UC2 : <<refine>>
+R3 <.. UC1 : <<refine>>
+R4 <.. UC4 : <<refine>>
+R5 <.. UC5 : <<refine>>
+R6 <.. UC6 : <<refine>>
+R7 <.. UC7 : <<refine>>
+R8 <.. UC8 : <<refine>>
+R9 <.. UC10 : <<refine>>
+R10 <.. UC9 : <<refine>>
+
+@enduml
