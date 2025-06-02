@@ -1,6 +1,8 @@
 @startuml
 ' 自動販売機のハードウェア構成をコンポジット集約で表現
 
+left to right direction
+
 class 自動販売機 {
 }
 
