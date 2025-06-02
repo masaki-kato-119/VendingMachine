@@ -1,0 +1,29 @@
+@startuml
+title FTA：商品が出ない／誤表示
+
+' トップ事象
+[商品が出ない／誤表示] as TOP
+
+' ゲート（ラベルで表現）
+[OR] as OR1
+[OR] as OR2
+
+' 下位事象
+[商品ラックの詰まり] as E1
+[商品ラック在庫センサー故障] as E2
+[商品補充忘れ] as E3
+[商品選択ボタン故障] as E4
+[表示パネル誤表示] as E5
+
+' 構造
+TOP -down-> OR1
+TOP -down-> OR2
+
+OR1 -down-> E1
+OR1 -down-> E2
+OR1 -down-> E3
+
+OR2 -down-> E4
+OR2 -down-> E5
+
+@enduml

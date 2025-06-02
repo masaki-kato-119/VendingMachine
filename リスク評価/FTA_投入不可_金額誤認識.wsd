@@ -1,0 +1,26 @@
+@startuml
+title FTA：投入不可・金額誤認識
+
+' トップ事象
+[投入不可・金額誤認識] as TOP
+
+' ゲート（ラベルで表現）
+[OR] as OR1
+
+' 下位事象
+[硬貨詰まり] as E1
+[紙幣詰まり] as E2
+[投入金口センサー故障] as E3
+[金額認識回路故障] as E4
+[異物投入] as E5
+
+' 構造
+TOP -down-> OR1
+
+OR1 -down-> E1
+OR1 -down-> E2
+OR1 -down-> E3
+OR1 -down-> E4
+OR1 -down-> E5
+
+@enduml

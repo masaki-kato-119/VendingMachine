@@ -25,6 +25,17 @@ def generate_plantuml_image(wsd_file_path, plantuml_jar_path='c:/plantuml.jar', 
     if not os.path.exists(plantuml_jar_path):
         raise FileNotFoundError(f"{plantuml_jar_path} が見つかりません")
 
+    # 出力ファイルのパスを決定
+    output_file = str(wsd_file_path.with_suffix(f'.{output_format}'))
+
+    # 既存のpngが新しい場合はスキップ
+    if os.path.exists(output_file):
+        wsd_mtime = os.path.getmtime(wsd_file_path)
+        png_mtime = os.path.getmtime(output_file)
+        if png_mtime >= wsd_mtime:
+            print(f"スキップ: {output_file} は最新です")
+            return
+        
     # コマンドを構築
     command = [
         'java', '-jar', plantuml_jar_path,
@@ -50,6 +61,8 @@ if __name__ == '__main__':
         'アクティビティ図_ユースケース',
         '要求図',
         'シミュレーション_機能',
+        'プロセス',
+        'リスク評価',
     ]
 
     current_dir = os.getcwd()
