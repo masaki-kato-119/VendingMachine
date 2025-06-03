@@ -1,5 +1,18 @@
+class State:
+    WAITING = "待機中"
+    INSERTING_MONEY = "お金投入"
+    SELECTING_PRODUCT = "商品選択中"
+    DISPENSING_PRODUCT = "商品払い出し"
+    DISPENSING_CHANGE = "釣銭払い出し"
+    COMPLETED = "購入完了"
+
+
+
+
 class VendingMachine:
     def __init__(self):
+        self.state = State.WAITING  # 初期状態
+        
         self.display_panel = DisplayPanel()
         self.product_rack = ProductRack()
         self.money_input = MoneyInput()
@@ -8,8 +21,25 @@ class VendingMachine:
         self.sales_vault = SalesVault()
         self.control_panel = ControlPanel()
 
+    def transition_state(self, next_state):
+        """ 状態遷移の検証 """
+        valid_transitions = {
+            State.WAITING: [State.INSERTING_MONEY],
+            State.INSERTING_MONEY: [State.SELECTING_PRODUCT],
+            State.SELECTING_PRODUCT: [State.DISPENSING_PRODUCT, State.DISPENSING_CHANGE],
+            State.DISPENSING_PRODUCT: [State.DISPENSING_CHANGE],
+            State.DISPENSING_CHANGE: [State.COMPLETED],
+        }
+
+        if next_state in valid_transitions.get(self.state, []):
+            print(f"hnote over 自動販売機: {next_state}")
+            self.state = next_state
+        else:
+            print(f"hnote over 自動販売機: {next_state}")
+
     def sequence_demo(self):
-        # シーケンス図に基づく呼び出し順
+        # 在庫と釣銭確認
+        self.transition_state(State.WAITING)
         print('自動販売機 -> ', end='')
         stock = self.product_rack.get_stock_info()
 
@@ -24,6 +54,8 @@ class VendingMachine:
         self.display_panel.display_change_status(change)
         print('表示パネル -> 利用者 : 釣銭有無')
 
+        # お金投入
+        self.transition_state(State.INSERTING_MONEY)
         print('利用者 -> 投入金口 : お金投入')
 
         print('自動販売機 -> ', end='')
@@ -38,6 +70,10 @@ class VendingMachine:
         self.control_panel.light_selectable_buttons()
 
         print('操作パネル -> 利用者 : 選択可能な商品ボタン')
+
+        # 商品選択
+        self.transition_state(State.SELECTING_PRODUCT)
+
 
         print('利用者 -> 操作パネル : 商品ボタン押下')
 
@@ -55,6 +91,9 @@ class VendingMachine:
         print('自動販売機 -> ', end='')
         self.change_machine.get_current_change()
 
+        # 釣銭払い出し
+        self.transition_state(State.DISPENSING_CHANGE)
+
         print('自動販売機 -> ', end='')
         self.display_panel.guide_change_refund()
 
@@ -64,6 +103,9 @@ class VendingMachine:
         self.change_machine.dispense_change()
 
         print('釣銭機 -> 利用者 : 釣銭')
+
+        # 完了
+        self.transition_state(State.COMPLETED)
 
 class DisplayPanel:
     def display_product_list(self, stock):
