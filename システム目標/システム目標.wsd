@@ -1,0 +1,37 @@
+@startuml
+left to right direction
+title システム目標
+
+package "利用者の期待" {
+  usecase "簡単操作で購入したい" as U_Goal1
+  usecase "安全に使いたい" as U_Goal2
+}
+
+package "事業者の期待" {
+  usecase "効率的に運用したい" as B_Goal1
+  usecase "安定した収益を得たい" as B_Goal2
+}
+
+package "システムの全体目標" {
+  actor 利用者
+  actor 管理者
+
+  rectangle "自動販売機システム" {
+    usecase "GOAL-001: 高い利便性の提供" as G1
+    usecase "GOAL-002: 安全で信頼性の高い運用" as G2
+    usecase "GOAL-003: 効果的な事業運営の実現" as G3
+    usecase "GOAL-004: 法規制および環境配慮" as G4
+  }
+}
+
+利用者 -- U_Goal1
+利用者 -- U_Goal2
+管理者 -- B_Goal1
+管理者 -- B_Goal2
+
+U_Goal1 -- G1
+U_Goal2 -- G2
+B_Goal1 -- G3
+B_Goal2 -- G3
+G2 -- G4
+@enduml

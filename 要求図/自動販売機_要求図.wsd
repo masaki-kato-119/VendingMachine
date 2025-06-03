@@ -1,4 +1,4 @@
-@startuml 自動販売機_要求図
+@startuml
 left to right direction
 
 ' アクター定義
@@ -83,34 +83,34 @@ SR3 --> R10 : <<deriveReqt>>
 
 ' ユースケース定義
 class UC1 <<usecase>> {
-   商品一覧を表示する
+  text = 商品一覧を表示する
 }
 class UC2 <<usecase>> {
-   商品を選択し購入する 
+  text = 商品を選択し購入する
 }
 class UC3 <<usecase>> {
-   お金を投入する 
+  text = お金を投入する
 }
 class UC4 <<usecase>> {
-   釣銭_返金を受け取る 
+  text = 釣銭_返金を受け取る
 }
 class UC5 <<usecase>> {
-   売上金を回収する 
+  text = 売上金を回収する
 }
 class UC6 <<usecase>> {
-   商品を補充する 
+  text = 商品を補充する
 }
 class UC7 <<usecase>> {
-   釣銭を補充する 
+  text = 釣銭を補充する
 }
 class UC8 <<usecase>> {
-   販売商品を変更する 
+  text = 販売商品を変更する
 }
 class UC9 <<usecase>> {
-   故障対応を行う 
+  text = 故障対応を行う
 }
 class UC10 <<usecase>> {
-   機械の状態を確認する 
+  text = 機械の状態を確認する
 }
 
 ' 要求とユースケースのトレーサビリティ
@@ -124,5 +124,108 @@ R7 <.. UC7 : <<refine>>
 R8 <.. UC8 : <<refine>>
 R9 <.. UC10 : <<refine>>
 R10 <.. UC9 : <<refine>>
+
+' STPA由来のハザード定義
+package "STPAハザード" {
+  class H1 <<hazard_stereotype>> {
+    id = H1
+    text = 利用者感電
+    description = 利用者がアクセス可能な部分が危険な電圧に曝される状態
+  }
+  class H2 <<hazard_stereotype>> {
+    id = H2
+    text = 釣銭不足・誤計算
+    description = 釣銭が不足している、または計算が誤っている状態で取引が実行される状態
+  }
+  class H3 <<hazard_stereotype>> {
+    id = H3
+    text = 商品の不適切温度管理
+    description = 商品が適切な温度管理範囲外（過熱または過冷却）で保管・提供される状態
+  }
+  class H4 <<hazard_stereotype>> {
+    id = H4 ' コロン(:)を等号(=)に修正
+    text = 商品誤払い出し・不払い出し ' コロン(:)を等号(=)のスタイルに合わせるため、実際には属性定義のようにしない
+    description = 商品が選択と異なる、または払い出されない状態 ' 同上
+  }
+}
+' skinparam class<<hazard_stereotype>> {
+'   BackgroundColor LightCoral
+'   BorderColor Red
+' }
+
+' <<requirement>> でSTPA安全要求 (既存のものを修正・拡充)
+package "STPA安全要求" {
+  class RQ_SAF_001 <<requirement>> {
+    id = RQ_SAF_001
+    text = "釣銭残量が不足している場合、商品販売処理を中断しなければならない。"
+  }
+  class RQ_SAF_002 <<requirement>> {
+    id = RQ_SAF_002
+    text = "釣銭残量は販売処理の直前に自動チェックされなければならない。"
+  }
+  class RQ_SAF_003 <<requirement>> {
+    id = RQ_SAF_003
+    text = "利用者が接触可能な箇所は、危険な電圧から保護されなければならない。\n漏電検知時は電源を遮断すること。"
+  }
+  class RQ_SAF_004 <<requirement>> {
+    id = RQ_SAF_004
+    text = "冷蔵・冷凍商品の保管温度逸脱時は販売を停止し警告すること。"
+  }
+  class RQ_SAF_005 <<requirement>> {
+    id = RQ_SAF_005 ' コロン(:)を等号(=)に修正
+    text = "販売制御ユニットは、決済完了後、\n在庫情報が「あり」の商品に対して、\n所定時間内に商品払い出し指示を\n発行しなければならない。"
+  }
+  class RQ_SAF_006 <<requirement>> {
+    id = RQ_SAF_006 ' コロン(:)を等号(=)に修正
+    text = "在庫情報は、販売処理の直前に\n最新の状態に同期・検証されなければならない。\n在庫センサーの異常時は該当商品の販売を停止すること。"
+  }
+  class RQ_SAF_007 <<requirement>> {
+    id = RQ_SAF_007 ' コロン(:)を等号(=)に修正
+    text = "商品払い出し指示後、払い出し検知センサーからの\nフィードバックが一定時間内にない場合は\nエラーとして処理し、利用者に通知すること。"
+  }
+}
+
+' STPAハザードとSTPA安全要求の関連付け
+RQ_SAF_001 ..> H2 : <<mitigates>>
+RQ_SAF_002 ..> H2 : <<mitigates>>
+RQ_SAF_003 ..> H1 : <<mitigates>>
+RQ_SAF_004 ..> H3 : <<mitigates>>
+RQ_SAF_005 ..> H4 : <<mitigates>>
+RQ_SAF_006 ..> H4 : <<mitigates>>
+RQ_SAF_007 ..> H4 : <<mitigates>>
+
+' STPA安全要求と他の要求/ユースケースとの関連
+' 既存の関連
+RQ_SAF_001 ..> SR1 : <<trace>> ' 安全な購入体験への貢献
+RQ_SAF_002 ..> SR1 : <<trace>> ' 安全な購入体験への貢献
+RQ_SAF_001 ..> R2 : <<trace>>  ' R2「商品を選んで購入したい」との関連 (釣銭不足で購入処理中断)
+RQ_SAF_002 ..> UC2 : <<satisfy>> ' UC2「商品を選択し購入する」との関連 (購入処理中の釣銭チェック)
+
+' RQ_SAF_003 の関連 (利用者保護)
+RQ_SAF_003 ..> SR1 : <<trace>> ' 利用者の安全確保 (感電防止)
+
+' RQ_SAF_004 の関連 (製品品質・安全)
+RQ_SAF_004 ..> SR1 : <<trace>> ' 利用者への安全な商品提供
+RQ_SAF_004 ..> R2  : <<trace>>  ' R2「商品を選んで購入したい」の品質保証側面
+RQ_SAF_004 ..> UC2 : <<satisfy>> ' UC2「商品を選択し購入する」での安全な商品提供
+
+' RQ_SAF_005 の関連 (確実な商品払い出し)
+RQ_SAF_005 ..> SR1 : <<trace>> ' 確実な商品購入の実現
+RQ_SAF_005 ..> R2  : <<trace>>  ' R2「商品を選んで購入したい」の確実な実行
+RQ_SAF_005 ..> UC2 : <<satisfy>> ' UC2「商品を選択し購入する」の確実な商品提供
+
+' RQ_SAF_006 の関連 (正確な在庫情報に基づく販売)
+RQ_SAF_006 ..> SR1 : <<trace>> ' 信頼できる商品情報の提供と購入
+RQ_SAF_006 ..> R2  : <<trace>>  ' R2「商品を選んで購入したい」の前提となる在庫確認
+RQ_SAF_006 ..> R3  : <<trace>>  ' R3「購入可能な商品を視認したい」の正確性担保
+RQ_SAF_006 ..> UC1 : <<satisfy>> ' UC1「商品一覧を表示する」での正確な在庫表示
+RQ_SAF_006 ..> UC2 : <<satisfy>> ' UC2「商品を選択し購入する」での在庫に基づく販売
+
+' RQ_SAF_007 の関連 (払い出しエラー時の対応)
+RQ_SAF_007 ..> SR1 : <<trace>> ' 購入トラブル時の適切な対応
+RQ_SAF_007 ..> R2  : <<trace>>  ' R2「商品を選んで購入したい」のエラー処理
+RQ_SAF_007 ..> R4  : <<trace>>  ' R4「釣銭・返金を正しく受け取りたい」 (払い出し失敗時の返金処理への影響)
+RQ_SAF_007 ..> UC2 : <<satisfy>> ' UC2「商品を選択し購入する」のエラー時の振る舞い
+RQ_SAF_007 ..> UC4 : <<satisfy>> ' UC4「釣銭_返金を受け取る」 (払い出し失敗による返金)
 
 @enduml

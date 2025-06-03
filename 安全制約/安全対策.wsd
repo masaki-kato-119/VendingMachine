@@ -1,0 +1,33 @@
+@startuml
+
+' (既存の要求図の STPA安全要求 パッケージ内に追加)
+' package "STPA安全要求" {
+'   ... (既存の RQ_SAF_001 から RQ_SAF_004) ...
+
+  class RQ_SAF_005 <<requirement>> {
+    id = RQ_SAF_005
+    text = "販売制御ユニットは、決済完了後、在庫情報が「あり」の商品に対して、\n所定時間内に商品払い出し指示を発行しなければならない。"
+    description = "UCA-H4-1 (払い出し指示不提供) の対策"
+  }
+  class RQ_SAF_006 <<requirement>> {
+    id = RQ_SAF_006
+    text = "在庫情報は、販売処理の直前に最新の状態に同期・検証されなければならない。\n在庫センサーの異常時は該当商品の販売を停止すること。"
+    description = "UCA-H4-1の原因 (在庫情報誤り) の対策、H-4全般の対策"
+  }
+  class RQ_SAF_007 <<requirement>> {
+    id = RQ_SAF_007
+    text = "商品払い出し指示後、払い出し検知センサーからのフィードバックが\n一定時間内にない場合はエラーとして処理し、利用者に通知すること。"
+    description = "H-4 (商品不払い出し) の検知と対応"
+  }
+' }
+
+' (ハザードと安全要求の関連付けに以下を追加)
+' RQ_SAF_005 ..> H4 : <<mitigates>>
+' RQ_SAF_006 ..> H4 : <<mitigates>>
+' RQ_SAF_007 ..> H4 : <<mitigates>>
+
+' (UCAと安全要求の関連付けも表現可能 - 例:ノートや依存関係で)
+' RQ_SAF_005 ..> UCA_H4_1_REF : <<prevents>> ' UCA_H4_1_REFはUCA-H4-1を表す要素への参照(例:ノート)
+
+
+@enduml

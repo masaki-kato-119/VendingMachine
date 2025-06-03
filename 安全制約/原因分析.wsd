@@ -1,0 +1,74 @@
+@startuml
+title FTA: UCA-H4-1 - 商品Xの払い出し指示不提供
+
+' Top Event (The UCA itself)
+[<b>UCA-H4-1: 商品Xの払い出し指示を<br>提供しない</b>] as TOP_UCA_H4_1
+
+' Main OR Gate below the Top Event
+[OR] as OR_Main_Cause
+
+' Intermediate Causes / Categories (leading to the OR gate)
+[販売制御ユニット内部の問題] as C1_ControllerIssue
+[販売制御ユニットへの<br>入力情報の問題] as C2_InputDataIssue
+[外部要因または<br>リソースの問題] as C3_ExternalResourceIssue
+
+' Basic Events for C1_ControllerIssue
+[OR] as OR_ControllerInternal
+[ソフトウェアのバグ<br>(払い出しロジック不具合)] as E11_SoftwareBug
+[ハードウェア故障<br>(コントローラ自体)] as E12_HardwareFailure
+
+' Basic Events for C2_InputDataIssue
+[OR] as OR_InputData
+[在庫情報が「なし」と誤認識<br>(センサー/DB/更新エラー)] as E21_WrongStockInfo
+[決済完了信号の不達/遅延] as E22_PaymentSignalError
+[商品選択信号の不達/破損] as E23_SelectionSignalError
+
+' Basic Events for C3_ExternalResourceIssue
+[OR] as OR_ExternalResource
+[電源供給の不安定化<br>(一時的な電圧降下)] as E31_PowerIssue
+[他の高優先度処理による<br>リソース不足] as E32_ResourceConflict
+
+' Structure
+' Intermediate Causes -> Main OR Gate
+C1_ControllerIssue -up-> OR_Main_Cause
+C2_InputDataIssue -up-> OR_Main_Cause
+C3_ExternalResourceIssue -up-> OR_Main_Cause
+
+' Main OR Gate -> Top Event
+OR_Main_Cause -up-> TOP_UCA_H4_1
+
+' Basic Events -> OR Gates for Intermediate Causes
+E11_SoftwareBug -up-> OR_ControllerInternal
+E12_HardwareFailure -up-> OR_ControllerInternal
+OR_ControllerInternal -up-> C1_ControllerIssue
+
+E21_WrongStockInfo -up-> OR_InputData
+E22_PaymentSignalError -up-> OR_InputData
+E23_SelectionSignalError -up-> OR_InputData
+OR_InputData -up-> C2_InputDataIssue
+
+E31_PowerIssue -up-> OR_ExternalResource
+E32_ResourceConflict -up-> OR_ExternalResource
+OR_ExternalResource -up-> C3_ExternalResourceIssue
+
+
+' Layout Hints (Optional)
+TOP_UCA_H4_1 -[hidden]down- OR_Main_Cause
+OR_Main_Cause -[hidden]down- C1_ControllerIssue
+OR_Main_Cause -[hidden]down- C2_InputDataIssue
+OR_Main_Cause -[hidden]down- C3_ExternalResourceIssue
+
+C1_ControllerIssue -[hidden]down- OR_ControllerInternal
+OR_ControllerInternal -[hidden]down- E11_SoftwareBug
+E11_SoftwareBug -[hidden]right- E12_HardwareFailure
+
+C2_InputDataIssue -[hidden]down- OR_InputData
+OR_InputData -[hidden]down- E21_WrongStockInfo
+E21_WrongStockInfo -[hidden]right- E22_PaymentSignalError
+E22_PaymentSignalError -[hidden]right- E23_SelectionSignalError
+
+C3_ExternalResourceIssue -[hidden]down- OR_ExternalResource
+OR_ExternalResource -[hidden]down- E31_PowerIssue
+E31_PowerIssue -[hidden]right- E32_ResourceConflict
+
+@enduml
