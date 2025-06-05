@@ -4,7 +4,7 @@ left to right direction
 ' アクター定義
 class 利用者 <<actor>> {}
 class 管理者 <<actor>> {}
-class メンテナンス担当 <<actor>> {}
+class メンテナンス担当者 <<actor>> {}
 
 ' 上位要求
 class SR1 <<requirement>> {
@@ -79,7 +79,7 @@ SR3 --> R10 : <<deriveReqt>>
 ' アクターと上位要求の関係
 利用者 *-- SR1
 管理者 *-- SR2
-メンテナンス担当 *-- SR3
+メンテナンス担当者 *-- SR3
 
 ' ユースケース定義
 class UC1 <<usecase>> {
