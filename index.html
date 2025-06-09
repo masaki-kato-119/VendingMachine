@@ -15,6 +15,8 @@
     .toc-link:hover { text-decoration: underline; }
     .header { margin-bottom: 1em; }
     .subtitle { font-size: 1.1em; color: #555; margin-top: 0.2em; }
+    .search-box { width: 80%; padding: 0.5em; margin-bottom: 1em; font-size: 1em; border: 1px solid #ccc; border-radius: 4px; }
+    .highlight { background: yellow; }
   </style>
 </head>
 <body>
@@ -24,26 +26,86 @@
         <h1 style="margin-bottom:0;">自動販売機モデル</h1>
         <div class="subtitle">MBSE × AI検証支援</div>
       </div>
+      <input type="text" class="search-box" placeholder="キーワード検索..." oninput="highlightInIframe()">
       <h2>目次</h2>
-      <a class="toc-link" href="自動販売機.html#開発プロセスについて" target="main">開発プロセスについて</a>
-      <a class="toc-link" href="自動販売機.html#プロセスフロー" target="main">プロセスフロー</a>
-      <a class="toc-link" href="自動販売機.html#システム目標" target="main">システム目標</a>
-      <a class="toc-link" href="自動販売機.html#安全制約導出" target="main">安全制約導出</a>
-      <a class="toc-link" href="自動販売機.html#要求図" target="main">要求図</a>
-      <a class="toc-link" href="自動販売機.html#ユースケース図" target="main">ユースケース図</a>
-      <a class="toc-link" href="自動販売機.html#コンテキスト図" target="main">コンテキスト図</a>
-      <a class="toc-link" href="自動販売機.html#ユースケース記述" target="main">ユースケース記述</a>
-      <a class="toc-link" href="自動販売機.html#ステートマシン図" target="main">ステートマシン図</a>
-      <a class="toc-link" href="自動販売機.html#システム構成図" target="main">システム構成図</a>
-      <a class="toc-link" href="自動販売機.html#fmea分析" target="main">FMEA分析</a>
-      <a class="toc-link" href="自動販売機.html#fta分析" target="main">FTA分析</a>
-      <a class="toc-link" href="自動販売機.html#安全設計フィードバック" target="main">安全設計フィードバック</a>
-      <a class="toc-link" href="自動販売機.html#シーケンス図_機能検証シミュレーションによる検証" target="main">シーケンス図_機能検証</a>
-      <a class="toc-link" href="自動販売機.html#自動販売機モデル-用語集" target="main">用語集</a>
-      <a class="toc-link" href="自動販売機.html#ai検証のためのプロンプト" target="main">ai検証のためのプロンプト</a>
-      <!-- 必要に応じてさらに追加 -->
+      <div id="toc-list">
+        <a class="toc-link" href="自動販売機.html#開発プロセスについて" target="main">開発プロセスについて</a>
+        <a class="toc-link" href="自動販売機.html#プロセスフロー" target="main">プロセスフロー</a>
+        <a class="toc-link" href="自動販売機.html#システム目標" target="main">システム目標</a>
+        <a class="toc-link" href="自動販売機.html#安全制約導出" target="main">安全制約導出</a>
+        <a class="toc-link" href="自動販売機.html#要求図" target="main">要求図</a>
+        <a class="toc-link" href="自動販売機.html#ユースケース図" target="main">ユースケース図</a>
+        <a class="toc-link" href="自動販売機.html#コンテキスト図" target="main">コンテキスト図</a>
+        <a class="toc-link" href="自動販売機.html#ユースケース記述" target="main">ユースケース記述</a>
+        <a class="toc-link" href="自動販売機.html#ステートマシン図" target="main">ステートマシン図</a>
+        <a class="toc-link" href="自動販売機.html#システム構成図" target="main">システム構成図</a>
+        <a class="toc-link" href="自動販売機.html#fmea分析" target="main">FMEA分析</a>
+        <a class="toc-link" href="自動販売機.html#fta分析" target="main">FTA分析</a>
+        <a class="toc-link" href="自動販売機.html#安全設計フィードバック" target="main">安全設計フィードバック</a>
+        <a class="toc-link" href="自動販売機.html#シーケンス図_機能検証シミュレーションによる検証" target="main">シーケンス図_機能検証</a>
+        <a class="toc-link" href="自動販売機.html#自動販売機モデル-用語集" target="main">用語集</a>
+        <a class="toc-link" href="自動販売機.html#ai検証のためのプロンプト" target="main">ai検証のためのプロンプト</a>
+      </div>
     </nav>
-    <iframe class="main" name="main" src="自動販売機.html"></iframe>
+    <iframe class="main" name="main" id="main-iframe" src="自動販売機.html" onload="highlightInIframe()"></iframe>
   </div>
+<script>
+  function highlightInIframe() {
+    const input = document.querySelector('.search-box').value.trim().toLowerCase();
+    const iframe = document.getElementById('main-iframe');
+    let doc;
+    try {
+      doc = iframe.contentDocument || iframe.contentWindow.document;
+    } catch (e) {
+      return;
+    }
+    if (!doc || !doc.body) return;
+
+    // 既存のハイライトをクリア
+    doc.querySelectorAll('.highlight').forEach(e => {
+      const textNode = doc.createTextNode(e.textContent);
+      e.replaceWith(textNode);
+    });
+
+    if (!input) return;
+
+    let found = false;
+    function highlightText(node) {
+      if (node.nodeType === 3) { // Text node
+        const idx = node.data.toLowerCase().indexOf(input);
+        if (idx >= 0) {
+          const span = doc.createElement('span');
+          span.className = 'highlight';
+          span.textContent = node.data.substring(idx, idx + input.length);
+          const after = node.splitText(idx);
+          after.splitText(input.length);
+          node.parentNode.insertBefore(span, after);
+          found = true;
+          return true; // 1箇所だけハイライト
+        }
+      } else if (
+        node.nodeType === 1 &&
+        node.childNodes &&
+        !/(script|style)/i.test(node.tagName) &&
+        !node.classList.contains('highlight')
+      ) {
+        for (let i = 0; i < node.childNodes.length; i++) {
+          if (highlightText(node.childNodes[i])) return true;
+        }
+      }
+      return false;
+    }
+
+    const body = doc.body;
+    if (body) {
+      highlightText(body);
+      // 最初のハイライト箇所にスクロール
+      if (found) {
+        const first = doc.querySelector('.highlight');
+        if (first) first.scrollIntoView({behavior: "smooth", block: "center"});
+      }
+    }
+  }
+</script>
 </body>
 </html>
