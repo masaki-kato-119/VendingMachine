@@ -3,6 +3,20 @@ import time
 import os
 from openai import OpenAI
 
+# 追加: 横幅を広げるカスタムCSS
+st.markdown(
+    """
+    <style>
+    .main .block-container {
+        max-width: 1980px !important;
+        padding-left: 3rem;
+        padding-right: 3rem;
+    }
+    </style>
+    """,
+    unsafe_allow_html=True
+)
+
 # --- OpenAIクライアント初期化 ---
 client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
 
