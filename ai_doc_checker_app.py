@@ -67,13 +67,20 @@ activity_function = ["./アクティビティ図_機能/お金投入を監視す
                     "./アクティビティ図_機能/釣銭を確認する.wsd",
                     "./アクティビティ図_機能/釣銭有無を表示する.wsd"]
 
-sequence = ["./シーケンス図_機能/機能検証.wsd",]
+sequence = ["./シミュレーション_機能/自動販売機.wsd",]
 
 request = ["./要求図/自動販売機_要求図.wsd",]
 
 system = ["./システム構成図/自動販売機_システム構成図.wsd",]
 
 glossary = ["./用語集/用語集.md"]
+
+fmea = ["./リスク評価/FMEA.md"]
+
+fta = ["./リスク評価/FTA_商品が出ない_誤表示.wsd",
+       "./リスク評価/FTA_釣銭不足_返金不可.wsd",
+       "./リスク評価/FTA_投入不可_金額誤認識.wsd"
+       ]
 
 # --- 検証オプション ---
 options = ["",
@@ -84,7 +91,7 @@ options = ["",
            "図間整合性チェック システム構成図とシーケンス図",
            "網羅性チェック 要求カバレッジ",
            "網羅性チェック フローカバレッジ",
-           "網羅性チェック 状態・遷移カバレッジ",
+           "網羅性チェック 状態_遷移カバレッジ",
            "網羅性チェック リスク対応カバレッジ",
            "シミュレーションベースの検証 シーケンス図の妥当性検証 (シナリオ生成とシミュレーション実行)",
            "シミュレーションベースの検証 ステートマシン図の動的検証 (イベントシーケンス生成と動的解析)"
@@ -119,6 +126,18 @@ if choice == "図間整合性チェック ステートマシン図と関連ド�
 if choice == "図間整合性チェック システム構成図とシーケンス図":
     files =  system + sequence
 
+if choice == "網羅性チェック 要求カバレッジ":
+    files =  request + usecase
+
+if choice == "網羅性チェック フローカバレッジ":
+    files =  usecase_description + activiry_usecase
+
+if choice == "網羅性チェック 状態_遷移カバレッジ":
+    files =  statemachine
+
+if choice == "網羅性チェック リスク対応カバレッジ":
+    files =  fmea + fta + usecase_description + statemachine
+
 # --- AI検証 ---
 if st.button("🔍 AI検証を実行"):
     if not files:
@@ -129,27 +148,23 @@ if st.button("🔍 AI検証を実行"):
         st.stop()
     with st.spinner("AIが仕様ドキュメントを分析中..."):
         try:
-            context = ""
             st.markdown("#### 検証対象ファイル一覧")
-            l = ""
-            for f in files:
-                l = l + f + "\n"
-            st.code(l)
-               
+            st.code('\n'.join(files))
+
+            context_parts = []
             for file_name in files:
                 if os.path.exists(file_name):
                     with open(file_name, "r", encoding="utf-8") as f:
                         content = f.read()
-                        context += f"\n### ドキュメント: {file_name}\n{content}\n"
+                    context_parts.append(f"\n### ドキュメント: {file_name}\n{content}\n")
                 else:
-                    st.markdown(f"""ファイルがありません
-                    {file_name}
-                    """)
+                    st.warning(f"ファイルがありません: {file_name}")
+
+            context = ''.join(context_parts)
             prompt = f"{txt_content}\n\n---\n\n{context}"
-            result = ""
+
             response = client.chat.completions.create(
                 model="gpt-4.1",
-                #model="gpt-4",
                 messages=[
                     {"role": "system", "content": "あなたはMBSE仕様ドキュメントの整合性検証を支援するAIです。"},
                     {"role": "user", "content": prompt}
