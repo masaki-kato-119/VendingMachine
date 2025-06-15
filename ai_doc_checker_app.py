@@ -53,7 +53,7 @@ activiry_usecase = [   "./アクティビティ図_ユースケース/お金を�
 
 statemachine = ["./ステートマシン図/自動販売機_メイン.wsd",
                 "./ステートマシン図/自動販売機_メンテナンスモード.wsd",
-                "./ステートマシン図/自動販売機_故障中.wsd",
+                "./ステートマシン図/自動販売機_管理モード.wsd",
                 "./ステートマシン図/自動販売機_故障中.wsd"]
 
 activity_function = ["./アクティビティ図_機能/お金投入を監視する.wsd",
@@ -84,11 +84,14 @@ fta = ["./リスク評価/FTA_商品が出ない_誤表示.wsd",
 
 # --- 検証オプション ---
 options = ["",
-           "図間整合性チェック 用語_ID整合性チェック",
+           "図妥当性チェック ユースケース図",
            "図間整合性チェック 要求図とユースケース図",
+           "図面間整合チェック ユースケース図とユースケース記述",
            "図間整合性チェック ユースケース記述内のフローとアクティビティ図（ユースケース）",
+           "図間整合性チェック アクティビティ図（ユースケース）とステートマシン図",
            "図間整合性チェック ステートマシン図と関連ドキュメント",
            "図間整合性チェック システム構成図とシーケンス図",
+           "図間整合性チェック 用語_ID整合性チェック",
            "網羅性チェック 要求カバレッジ",
            "網羅性チェック フローカバレッジ",
            "網羅性チェック 状態_遷移カバレッジ",
@@ -111,6 +114,12 @@ else:
         st.info(f"{choice}.txt ファイルが見つかりません。")
 
 # コンテキストファイル選択
+if choice == "図妥当性チェック ユースケース図":
+    files =  usecase
+
+if choice == "図面間整合チェック ユースケース図とユースケース記述":
+    files = usecase + usecase_description
+
 if choice == "図間整合性チェック 用語_ID整合性チェック":
     files = request + usecase + usecase_description + system + statemachine + glossary
 
@@ -119,6 +128,9 @@ if choice == "図間整合性チェック 要求図とユースケース図":
 
 if choice == "図間整合性チェック ユースケース記述内のフローとアクティビティ図（ユースケース）":
     files =  usecase_description + activiry_usecase
+
+if choice == "図間整合性チェック アクティビティ図（ユースケース）とステートマシン図":
+    files =  usecase_description + activiry_usecase + statemachine
 
 if choice == "図間整合性チェック ステートマシン図と関連ドキュメント":
     files =  statemachine + usecase_description + activity_function
@@ -176,5 +188,14 @@ if st.button("🔍 AI検証を実行"):
             st.success("✅ AI検証の結果")
             with st.expander("AI検証の詳細結果", expanded=True):
                 st.markdown(result)
+
+            # Save the verification result to a file
+            result_dir = "./検証結果"
+            os.makedirs(result_dir, exist_ok=True)
+            result_file = os.path.join(result_dir, f"{choice}_検証結果.txt")
+            with open(result_file, "w", encoding="utf-8") as f:
+                f.write(result)
+            st.info(f"検証結果がファイルに保存されました: {result_file}")
+
         except Exception as e:
             st.error(f"エラーが発生しました: {e}")
