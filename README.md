@@ -26,7 +26,7 @@ AI: OpenAI API (GPT-4.1), GitHub Copilot
 2. セットアップ
 ```
 # 1. リポジトリをクローン
-git clone https://github.com/your-username/VendingMachine.git
+git clone https://github.com/masaki-kato-119/VendingMachine.git
 cd VendingMachine
 
 # 2. 必要なライブラリをインストール
@@ -49,6 +49,7 @@ streamlit run ai_doc_checker_app.py
 ```
 ブラウザでツールが立ち上がったら、ドロップダウンから検証したい項目を選択し、実行ボタンを押してください。
 
+---
 ### 今後の展望：Enterprise Architect (EA) + SysMLへの展開
 
 本プロジェクトで確立したコンセプトを、より本格的なMBSE環境へ展開することを目指します。
