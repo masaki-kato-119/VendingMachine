@@ -53,7 +53,7 @@ streamlit run ai_doc_checker_app.py
 Streamlitで構築された仕様検索エンジンを起動します。
 
 ```
-streamlit run rag_spesification_search.py
+streamlit run rag_specification_seartch.py
 ```
 ブラウザでツールが立ち上がったら、ドロップダウンから検証したい項目を選択し、実行ボタンを押してください。
 
