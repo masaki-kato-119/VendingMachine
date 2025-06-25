@@ -49,6 +49,16 @@ streamlit run ai_doc_checker_app.py
 ```
 ブラウザでツールが立ち上がったら、ドロップダウンから検証したい項目を選択し、実行ボタンを押してください。
 
+5. RAGを使った仕様検索エンジン
+Streamlitで構築された仕様検索エンジンを起動します。
+
+```
+streamlit run rag_spesification_search.py
+```
+ブラウザでツールが立ち上がったら、ドロップダウンから検証したい項目を選択し、実行ボタンを押してください。
+
+
+
 ---
 ### 今後の展望：Enterprise Architect (EA) + SysMLへの展開
 
